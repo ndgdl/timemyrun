@@ -26,9 +26,9 @@ const Home: NextPage = () => {
             Time my Run
           </h1>
           <div className="flex items-center justify-center rounded-lg bg-white">
-            <TimeInput setTime={setMins} />
-            :
-            <TimeInput setTime={setSecs} />
+            <TimeInput setTime={setMins} className="text-xl" />
+            <span>:</span>
+            <TimeInput setTime={setSecs} className="text-xl" />
           </div>
           <div className="text-xl text-white">
             You would run the semi-marathon in{" "}
