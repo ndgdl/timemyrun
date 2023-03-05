@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
-import TimeInput from "~/components/Input";
+import TimeInput from "~/components/TimeInput";
 import computeTotalTime from "~/helpers/computeTotalTime";
 
 const DISTANCE_SEMIMARATHON = 21.0975;
@@ -26,9 +26,17 @@ const Home: NextPage = () => {
             Time my Run
           </h1>
           <div className="flex items-center justify-center rounded-lg bg-white">
-            <TimeInput setTime={setMins} className="w-20 text-center text-xl" />
+            <TimeInput
+              time={mins}
+              setTime={setMins}
+              className="w-20 text-center text-xl"
+            />
             <span>:</span>
-            <TimeInput setTime={setSecs} className="w-20 text-center text-xl" />
+            <TimeInput
+              time={secs}
+              setTime={setSecs}
+              className="w-20 text-center text-xl"
+            />
           </div>
           <div className="text-xl text-white">
             You would run the semi-marathon in{" "}
