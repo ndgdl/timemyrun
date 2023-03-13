@@ -17,13 +17,8 @@ function TimeInput({ time, setTime, className }: TimeInputProps) {
         className
       )}
       onChange={(event) => {
-        const value = event.currentTarget.value.slice(0, 2);
-
-        setTime(Number(value));
+        setTime(Number(event.currentTarget.value));
       }}
-      // onKeyDown={(event) => {
-      //   if (isNaN(Number(event.key)))
-      // }}
     />
   );
 }

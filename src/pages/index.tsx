@@ -5,10 +5,12 @@ import TimeInput from "~/components/TimeInput";
 import computeTotalTime from "~/helpers/computeTotalTime";
 
 const DISTANCE_SEMIMARATHON = 21.0975;
+const DISTANCE_MARATHON = 42.195;
 
 const Home: NextPage = () => {
-  const [mins, setMins] = useState(0);
+  const [mins, setMins] = useState(5);
   const [secs, setSecs] = useState(0);
+  const [distance, setDistance] = useState(DISTANCE_SEMIMARATHON);
 
   return (
     <>
@@ -21,10 +23,33 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
-        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
+        <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Time my Run
           </h1>
+          <div className="grid grid-cols-2 divide-x overflow-hidden rounded-lg border-white bg-slate-200 ">
+            <button
+              onClick={() => setDistance(DISTANCE_SEMIMARATHON)}
+              data-active={distance === DISTANCE_SEMIMARATHON}
+              className="group flex flex-col items-center p-2 opacity-20 data-[active=true]:bg-slate-500 data-[active=true]:text-white data-[active=true]:opacity-100 data-[active=true]:shadow-inner"
+            >
+              <span>Semi-marathon</span>
+              <span className="text-xs text-slate-700 group-data-[active=true]:text-white">
+                21,0975 km
+              </span>
+            </button>
+            <button
+              onClick={() => setDistance(DISTANCE_MARATHON)}
+              data-active={distance === DISTANCE_MARATHON}
+              className="group flex flex-col items-center p-2 opacity-20 data-[active=true]:bg-slate-500 data-[active=true]:text-white data-[active=true]:opacity-100 data-[active=true]:shadow-inner"
+            >
+              <span>Marathon</span>
+              <span className="text-xs text-slate-700 group-data-[active=true]:text-white">
+                42,195 km
+              </span>
+            </button>
+          </div>
+
           <div className="flex items-center justify-center rounded-lg bg-white">
             <TimeInput
               time={mins}
@@ -39,10 +64,11 @@ const Home: NextPage = () => {
             />
           </div>
           <div className="text-xl text-white">
-            You would run the semi-marathon in{" "}
+            You would run the{" "}
+            {distance === DISTANCE_MARATHON ? "marathon" : "semi-marathon"} in{" "}
             {computeTotalTime({
               runningSpeedPerKm: mins * 1000 * 60 + secs * 1000,
-              totalDistance: DISTANCE_SEMIMARATHON,
+              totalDistance: distance,
             })}
           </div>
         </div>
