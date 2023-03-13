@@ -7,9 +7,10 @@ import computeTotalTime from "~/helpers/computeTotalTime";
 const DISTANCE_SEMIMARATHON = 21.0975;
 const DISTANCE_MARATHON = 42.195;
 
+const DEFAULT_TIME = 5 * 1000 * 60; // 5:00
+
 const Home: NextPage = () => {
-  const [mins, setMins] = useState(5);
-  const [secs, setSecs] = useState(0);
+  const [time, setTime] = useState(DEFAULT_TIME);
   const [distance, setDistance] = useState(DISTANCE_SEMIMARATHON);
 
   return (
@@ -52,14 +53,8 @@ const Home: NextPage = () => {
 
           <div className="flex items-center justify-center rounded-lg bg-white">
             <TimeInput
-              time={mins}
-              setTime={setMins}
-              className="w-20 text-center text-xl"
-            />
-            <span>:</span>
-            <TimeInput
-              time={secs}
-              setTime={setSecs}
+              time={time}
+              setTime={setTime}
               className="w-20 text-center text-xl"
             />
           </div>
@@ -67,7 +62,7 @@ const Home: NextPage = () => {
             You would run the{" "}
             {distance === DISTANCE_MARATHON ? "marathon" : "semi-marathon"} in{" "}
             {computeTotalTime({
-              runningSpeedPerKm: mins * 1000 * 60 + secs * 1000,
+              runningSpeedPerKm: time,
               totalDistance: distance,
             })}
           </div>
