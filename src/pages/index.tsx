@@ -6,14 +6,14 @@ import TimeInput from "~/components/TimeInput";
 import ToggleRun from "~/components/ToggleRun";
 import computeTotalTime from "~/helpers/computeTotalTime";
 import { DISTANCE_SEMIMARATHON } from "~/helpers/distanceConstants";
-import { DEFAULT_AVERAGE_TIME } from "~/helpers/timeConstants";
+import { DEFAULT_AVERAGE_TIME, HOUR } from "~/helpers/timeConstants";
 
 const Home: NextPage = () => {
   const [time, setTime] = useState(DEFAULT_AVERAGE_TIME);
   const [distance, setDistance] = useState(DISTANCE_SEMIMARATHON);
-
+  
   const { hours, minutes, seconds } = computeTotalTime({ runningSpeedPerKm: time, totalDistance: distance })
-
+  const otherTime = Math.floor((HOUR / time) * 100) / 100;
   return (
     <>
       <Head>
@@ -35,6 +35,7 @@ const Home: NextPage = () => {
             setTime={setTime}
             className="w-20 text-center text-xl rounded-lg bg-white p-2"
           />
+          <p className="text-white">e.g. {otherTime} km / h</p>
           <Results distance={distance} hours={hours} minutes={minutes} seconds={seconds}/>
         </div>
       </main>
