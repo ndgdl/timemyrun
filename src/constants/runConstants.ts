@@ -1,4 +1,17 @@
-export const runs = [
+export interface Run {
+  id: string;
+  label: string;
+  distanceLabel?: string;
+  distance: number;
+}
+
+export const DEFAULT_RUN: Run = {
+  id: '10k',
+  label: '10 km',
+  distance: 10,
+};
+
+export const runs: Run[] = [
   {
     id: '5k',
     label: '5 km',

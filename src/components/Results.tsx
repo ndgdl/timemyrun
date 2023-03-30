@@ -1,20 +1,24 @@
-import { DISTANCE_MARATHON } from "~/helpers/distanceConstants";
-import formatTimeString from "~/helpers/formatTimeString";
+import { type Run } from "~/constants/runConstants";
+import { type SpeedType } from "~/constants/speedConstants";
+import { HOUR } from "~/constants/timeConstants";
+import computeTotalTime from "~/helpers/computeTotalTime";
 
 interface ResultsProps {
-  distance: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
+  run: Run;
+  speedType: SpeedType;
+  speed: number;
 }
 
-function Results({ distance, hours, minutes, seconds}: ResultsProps) {
+function Results({ run, speedType, speed}: ResultsProps) {
+  const { label, distance, distanceLabel} = run;
+  const runDescription = distanceLabel ? `the ${label} (${distanceLabel})` : `a ${label}`
+  const runTime = speedType === 'pace' ? speed * distance : (distance / speed) * HOUR
+
+  const { hours, minutes, seconds } = computeTotalTime(runTime);
 
   return (
     <div className="text-xl text-white">
-    You would run the{" "}
-    {distance === DISTANCE_MARATHON ? "marathon" : "semi-marathon"} in{" "}
-    { `${formatTimeString(hours)}:${formatTimeString(minutes)}:${formatTimeString(seconds)}` }
+    {`You would run ${runDescription} in ${hours}:${minutes}:${seconds}`}
     </div>
   )
 }

@@ -1,2 +1,0 @@
-export const DISTANCE_SEMIMARATHON = 21.0975;
-export const DISTANCE_MARATHON = 42.195;

@@ -2,21 +2,21 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { useState } from "react";
 import Results from "~/components/Results";
-import TimeInput from "~/components/TimeInput";
+import SpeedInput from "~/components/SpeedInput";
 import ToggleRun from "~/components/ToggleRun";
-import ToggleTimeSetting from "~/components/ToggleSpeedSetting";
-import computeTotalTime from "~/helpers/computeTotalTime";
-import { DISTANCE_SEMIMARATHON } from "~/helpers/distanceConstants";
-import { DEFAULT_SPEED_TIME, DEFAULT_SPEED_SETTING, HOUR, SPEED_SETTINGS } from "~/helpers/timeConstants";
+import { paceToString } from "~/helpers/convertToString";
+import { stringToPace } from "~/helpers/parseString";
+import { DEFAULT_PACE, DEFAULT_SPEED, type SpeedType } from "~/constants/speedConstants";
+import { DEFAULT_RUN } from "~/constants/runConstants";
+import { toPace, toSpeed } from "~/helpers/convert";
 
 const Home: NextPage = () => {
-  const [time, setTime] = useState(DEFAULT_SPEED_TIME);
-  const [speedSetting, setSpeedSetting] = useState(DEFAULT_SPEED_SETTING)
-  const [distance, setDistance] = useState(DISTANCE_SEMIMARATHON);
-  
-  const { hours, minutes, seconds } = computeTotalTime({ runningSpeedPerKm: time, totalDistance: distance })
-  const otherSpeedSetting = SPEED_SETTINGS.find((otherSpeedSetting) => otherSpeedSetting.id !== speedSetting.id)
-  const otherTime = Math.floor((HOUR / time) * 100) / 100;
+  const [pace, setPace] = useState(DEFAULT_PACE);
+  const [speed, setSpeed] = useState(DEFAULT_SPEED);
+  const [active, setActive] = useState<SpeedType>('pace');
+
+  const [run, setRun] = useState(DEFAULT_RUN);
+
   return (
     <>
       <Head>
@@ -32,24 +32,50 @@ const Home: NextPage = () => {
           <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
             Time my Run
           </h1>
-          <ToggleRun distance={distance} setDistance={setDistance}/>
-          <div className="relative">
-            <TimeInput
-              time={time}
-              setTime={setTime}
-              className="w-20 text-center text-xl rounded-lg bg-white p-2"
-            />
-            <ToggleTimeSetting
-              time={time}
-              setTime={setTime}
-              speedSetting={speedSetting}
-              setSpeedSetting={setSpeedSetting}
-              className="absolute top-[calc(50%_-_0.75rem)] left-[calc(100%_+_1rem)]"
-            />
+          <ToggleRun activeRun={run} setDistance={setRun}/>
+            <div className="grid grid-cols-1 space-y-2">
+              <SpeedInput
+                label="min/km"
+                speedType="pace"
+                speed={paceToString(pace)}
+                onChange={(event) => {
+                    const paceString = event.currentTarget.value;
+                    const pace = stringToPace(paceString);
+                    console.log(event.currentTarget.value)
+                    setPace(pace);
+                    console.log('pace:', pace);
+
+                    if (pace > 0) {
+                      const speed = toSpeed(pace);
+                      console.log('speed:', speed);
+                      setSpeed(speed);
+                    }
+                  }
+                }
+                disabled={active !== 'pace'}
+                onClick={() => setActive('pace')}
+              /> 
+              <SpeedInput
+                label="km/h"
+                speed={speed}
+                speedType="speed"
+                onChange={(event) => {
+                    
+                    const speed = Number(event.currentTarget.value);
+                    setSpeed(speed);
+
+                    if  (speed > 0) {
+                      const pace = toPace(speed);
+                      setPace(pace);
+                    }
+                  }
+                }
+                disabled={active !== 'speed'}
+                onClick={() => setActive('speed')}
+              />
+            </div>
           </div>
-          <p className="text-white">e.g. {`${otherTime} ${otherSpeedSetting?.label ?? ''}`} </p>
-          <Results distance={distance} hours={hours} minutes={minutes} seconds={seconds}/>
-        </div>
+          <Results run={run} speedType={active} speed={active === 'pace' ? pace : speed}/>
       </main>
     </>
   );

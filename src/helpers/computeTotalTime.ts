@@ -1,15 +1,9 @@
-import { HOUR, MINUTE, SECOND } from "./timeConstants";
+import { HOUR, MINUTE, SECOND } from "../constants/timeConstants";
 
-interface Props {
-  runningSpeedPerKm: number;
-  totalDistance: number;
-}
-
-function computeTotalTime({ runningSpeedPerKm, totalDistance }: Props) {
-  const durationMs = runningSpeedPerKm * totalDistance;
-  const seconds = Math.floor(durationMs / SECOND) % 60;
-  const minutes = Math.floor(durationMs / MINUTE) % 60;
-  const hours = Math.floor(durationMs / HOUR) % 60;
+function computeTotalTime(time: number) {
+  const seconds = Math.floor(time / SECOND) % 60;
+  const minutes = Math.floor(time / MINUTE) % 60;
+  const hours = Math.floor(time / HOUR) % 60;
 
   return { hours, minutes, seconds};
 }
