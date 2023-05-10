@@ -1,31 +1,39 @@
-import type { Dispatch, SetStateAction } from "react";
-import { type Run, runs } from "~/constants/runConstants";
+import { twMerge } from "tailwind-merge";
+import { RUN_OPTIONS, type Run } from "~/constants/runConstants";
 
 interface ToggleRunProps {
   activeRun: Run;
-  setDistance: Dispatch<SetStateAction<Run>>;
+  setDistance: (run: Run) => void;
 }
 
 function ToggleRun({ activeRun, setDistance }: ToggleRunProps) {
+  const isActiveRun = (runId: string) => runId === activeRun.id;
+
   return (
-    <div className="grid grid-cols-2 divide-x overflow-hidden rounded-lg border-white bg-slate-200 ">
-      {runs.map((run) => (
-        <button
+    <div className={twMerge("grid grid-cols-5 space-x-3")}>
+      {RUN_OPTIONS.map((run) => (
+        <div
           key={run.id}
+          data-active={isActiveRun(run.id)}
+          className={twMerge(
+            "flex flex-col items-center justify-start",
+            "rounded-md bg-white p-2 font-semibold",
+            "group",
+            "transition-transform delay-75 ease-in-out",
+            "hover:scale-105",
+            "cursor-pointer data-[active=true]:cursor-default",
+            "data-[active=true]:scale-95 data-[active=true]:bg-opacity-50 data-[active=true]:text-white"
+          )}
           onClick={() => setDistance(run)}
-          data-active={activeRun.id === run.id}
-          className="group flex flex-col items-center p-2 opacity-20 data-[active=true]:bg-slate-500 data-[active=true]:text-white data-[active=true]:opacity-100 data-[active=true]:shadow-inner"
         >
-          <span>{run.label}</span>
-          {run.distanceLabel ? (
-            <span className="text-xs text-slate-700 group-data-[active=true]:text-white">
-              {run.distanceLabel}
-            </span>
-          ) : null}
-        </button>
+          {run.label}
+          <span className="text-xs text-slate-500 group-data-[active=true]:text-white">
+            {run.distanceLabel}
+          </span>
+        </div>
       ))}
-    </div> 
-  )
+    </div>
+  );
 }
 
 export default ToggleRun;
