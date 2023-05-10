@@ -1,11 +1,11 @@
-function formatTwoDigit(number?: string) {
+export function formatTwoDigitNumber(number?: string) {
   if (number === undefined) return '00';
-  if (number.split("").length === 1) return `0${number}`
+  if (number.length === 1) return `0${number}`
   return number;
 }
 
 export function formatNumberString(number1?: string, number2?: string ) {
-  return `${formatTwoDigit(number1)}:${formatTwoDigit(number2)}`;
+  return `${formatTwoDigitNumber(number1)}:${formatTwoDigitNumber(number2)}`;
 }
 
 export default formatNumberString;
