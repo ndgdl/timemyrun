@@ -4,6 +4,8 @@ const config = {
     {
       extends: [
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
       ],
       files: ["*.ts", "*.tsx"],
       parserOptions: {
